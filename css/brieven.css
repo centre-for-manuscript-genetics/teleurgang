@@ -1,0 +1,505 @@
+/*
+ * brieven.css
+ * Styles for the Brieven (letters) section of De teleurgang van den Waterhoek.
+ * Converted from the original Multidoc Pro stylesheet (Streulet Default .ssh).
+ *
+ * Element names in comments refer to the original SGML/TEI tags; CSS selectors
+ * target the HTML elements that the XSLT will produce for each.
+ *
+ * Colour palette from the original stylesheet:
+ *   page background : #fff7eb  (warm off-white, from STREULET)
+ *   body text       : inherit (Times New Roman 12pt)
+ *   headings        : blue / navy / teal / olive (by div level)
+ *   editorial notes : maroon
+ *   links/refs      : blue
+ */
+
+
+
+/* ── STREULET (letter container) ─────────────────────────────────────────────
+   Warm off-white page, 8pt side margins                                     */
+.streulet {
+    margin-left: 0.5em;
+    margin-right: 0.5em;
+    background-color: #fff7eb;
+}
+
+/* ── LETTER ──────────────────────────────────────────────────────────────────
+   Small above/below spacing                                                  */
+.letter {
+    margin-top: 0.25em;
+    margin-bottom: 0.25em;
+}
+
+/* ── DOCTITLE ────────────────────────────────────────────────────────────────
+   Times New Roman 18pt, centred, loose leading                              */
+.doctitle {
+    font-family: "Times New Roman", Times, serif;
+    font-size: 18pt;
+    text-align: center;
+    line-height: 1.4;
+}
+
+/* ── TITLEPAGE ───────────────────────────────────────────────────────────────
+   Times New Roman, centred, loose leading                                   */
+.titlepage {
+    font-family: "Times New Roman", Times, serif;
+    text-align: center;
+    line-height: 1.4;
+}
+
+/* ── TITLESTMT ───────────────────────────────────────────────────────────────
+   Centred block                                                              */
+.titlestmt {
+    text-align: center;
+}
+
+/* ── TITLE ───────────────────────────────────────────────────────────────────
+   First occurrence: bold, red, roman
+   Subsequent: italic                                                         */
+.title-first {
+    font-style: normal;
+    font-weight: bold;
+    color: red;
+}
+.title {
+    font-style: italic;
+}
+
+/* ── Headings by DIV level ───────────────────────────────────────────────────
+   DIV1 > HEAD : Times New Roman bold blue ~200% (≈ 24pt), ruled below
+   DIV2 > HEAD : Times New Roman bold navy ~180% (≈ 22pt)
+   DIV3 > HEAD : Arial bold teal ~130% (≈ 16pt)
+   DIV4 > HEAD : Arial bold olive ~110% (≈ 13pt)
+   Generic HEAD : italic navy, centred                                        */
+.div1 > .head,
+h1.head {
+    font-family: "Times New Roman", Times, serif;
+    font-weight: bold;
+    color: blue;
+    font-size: 2em;
+    margin-top: 1em;
+    border-bottom: 3px solid blue; /* Z-RULER V="3" */
+    text-align: left;
+}
+
+.div2 > .head,
+h2.head {
+    font-family: "Times New Roman", Times, serif;
+    font-weight: bold;
+    color: navy;
+    font-size: 1.8em;
+    margin-top: 0.75em;
+}
+
+.div3 > .head,
+h3.head {
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: bold;
+    color: teal;
+    font-size: 1.3em;
+    margin-top: 0.6em;
+}
+
+.div4 > .head,
+h4.head {
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: bold;
+    color: olive;
+    font-size: 1.1em;
+}
+
+/* Generic HEAD (list heads, etc.) */
+.head {
+    font-style: italic;
+    color: navy;
+    text-align: center;
+    margin-bottom: 0.4em;
+}
+
+/* LIST > HEAD */
+.list > .head {
+    font-style: oblique;
+}
+
+/* BODY > DIV > HEAD */
+.body > .div > .head {
+    color: navy;
+    font-size: 2em;
+}
+
+/* BODY > HEAD */
+.body > .head {
+    font-size: 2.2em;
+    text-align: center;
+}
+
+/* ── Paragraphs ──────────────────────────────────────────────────────────────
+   First P in a block: no indent
+   Subsequent P: 12pt (≈ 1em) text-indent                                    */
+p {
+    text-indent: 1em;
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+p:first-of-type,
+p.first {
+    text-indent: 0;
+}
+
+/* PS (postscript), INI: indented like OPENER/CLOSER */
+p.ps,
+p.ini {
+    text-indent: 0;
+    margin-left: 15em; /* SPC-INDENT V="250" ≈ large left indent */
+}
+
+/* ── OPENER / CLOSER ─────────────────────────────────────────────────────────
+   Heavily indented, small above/below spacing                               */
+.opener,
+.closer {
+    margin-left: 15em;  /* SPC-INDENT V="250" */
+    margin-top: 0.4em;
+    margin-bottom: 0.4em;
+}
+
+/* ── SALUTE (inside LETTER) ─────────────────────────────────────────────────
+   Small above/below                                                          */
+.salute {
+    margin-top: 0.4em;
+    margin-bottom: 0.4em;
+}
+
+/* ── SIGNED ──────────────────────────────────────────────────────────────────
+   No special style beyond inherited                                         */
+.signed {}
+
+/* ── DATELINE ────────────────────────────────────────────────────────────────
+   Inherits from OPENER                                                      */
+.dateline {}
+
+/* ── SENDER / RECIPIENT ──────────────────────────────────────────────────────
+   RECIPIENT prepends "aan " (handled in XSLT); SENDER appends space        */
+.sender::after  { content: " "; }
+.recipient::before { content: "aan "; }
+
+/* ── ENVELOPE / EADDRESS / POSTMARK ─────────────────────────────────────────
+   ENVELOPE: maroon
+   EADDRESS: prepend "Adressering: "
+   POSTMARK: prepend "Poststempel: "
+   ADDRLINE inside ENVELOPE/EADDRESS: 30pt indent                            */
+.envelope {
+    color: maroon;
+}
+.eaddress::before  { content: "Adressering: "; display: block; }
+.postmark::before  { content: "Poststempel: "; display: block; }
+
+.envelope .addrline,
+.eaddress .addrline {
+    margin-left: 2em;
+}
+
+/* ── LOCUS ───────────────────────────────────────────────────────────────────
+   Prepend "Signatuur: "                                                      */
+.locus::before { content: "Signatuur: "; color: maroon;}
+
+/* ── COLL ────────────────────────────────────────────────────────────────────
+   Prepend "Collatie: "                                                       */
+.coll::before { content: "Collatie: "; color: maroon;}
+
+/* ── CAT ─────────────────────────────────────────────────────────────────────
+   Bold red, small above/below                                               */
+.cat, .titlestmt-letter-title {
+    font-weight: bold;
+    color: red;
+    margin-top: 0.2em;
+    margin-bottom: 0.2em;
+}
+
+/* ── SOURCEDESC ──────────────────────────────────────────────────────────────
+   Maroon, indented, small above                                             */
+.sourcedesc {
+    color: maroon;
+    margin-top: 0.4em;
+    margin-left: 2em;
+}
+
+/* ── NOTE ────────────────────────────────────────────────────────────────────
+   Maroon; bracketed content handled in XSLT: [note text]                    */
+.note {
+    color: maroon;
+}
+.note::before { content: "["; }
+.note::after  { content: "]"; }
+
+/* ── EDCOM (editorial comment) ───────────────────────────────────────────────
+   Maroon                                                                     */
+.edcom {
+    color: maroon;
+}
+
+/* ── EDCOR / EDCORR (editorial correction) ──────────────────────────────────
+   Bracketed: [text]                                                          */
+.edcor::before,
+.edcorr::before { content: "["; }
+.edcor::after,
+.edcorr::after  { content: "]"; }
+
+/* ── SIC ─────────────────────────────────────────────────────────────────────
+   Append " [sic]"                                                            */
+.sic::after { content: " [sic]"; }
+
+/* ── ADD (addition) ──────────────────────────────────────────────────────────
+   Surrounded by /slashes/                                                    */
+.add::before { content: "/"; }
+.add::after  { content: "/"; }
+
+/* ── DEL (deletion) ──────────────────────────────────────────────────────────
+   Surrounded by <-text>                                                      */
+.del::before { content: "<-"; }
+.del::after  { content: ">"; }
+
+/* ── Q (quoted speech) ───────────────────────────────────────────────────────
+   Opening/closing curly quotes (\147 = ' \148 = ')                         */
+.q::before { content: "\2018"; } /* ' */
+.q::after  { content: "\2019"; } /* ' */
+
+/* ── SOCALLED ────────────────────────────────────────────────────────────────
+   Single quotes (\145 = ' \146 = ')                                         */
+.socalled::before { content: "\2018"; }
+.socalled::after  { content: "\2019"; }
+
+/* ── MENTIONED ───────────────────────────────────────────────────────────────
+   Backtick open, double-quote close                                          */
+.mentioned::before { content: "`"; }
+.mentioned::after  { content: "\""; }
+
+/* ── Inline phrase-level styles ──────────────────────────────────────────────*/
+.emph   { font-style: oblique; }
+.hi     { font-style: italic; }
+.foreign { font-style: italic; }
+.title  { font-style: italic; }
+.term   { font-style: italic; }
+.label  { font-style: italic; }
+.u      { font-style: italic; }
+.du     { font-style: italic; text-decoration: underline; }
+.stage  { font-style: italic; }
+
+/* ── SPEAKER ─────────────────────────────────────────────────────────────────
+   Bold italic olive, centred, above spacing                                 */
+.speaker {
+    font-style: italic;
+    font-weight: bold;
+    color: olive;
+    text-align: center;
+    margin-top: 0.6em;
+}
+
+/* ── LABEL ───────────────────────────────────────────────────────────────────
+   Bold, small indent                                                         */
+.label {
+    font-weight: bold;
+    text-indent: 1em;
+    margin-right: 1.5em;
+}
+
+/* ── LIST / ITEM ─────────────────────────────────────────────────────────────
+   LIST: 10pt top indent, above/below break
+   ITEM: hanging indent (8pt above, 15pt left, -15pt first-line)            */
+.list {
+    padding-left: 0.6em;
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+}
+
+.item {
+    margin-top: 0.5em;
+    padding-left: 1em;
+    text-indent: -1em;
+}
+
+/* ── VERSE (L) ───────────────────────────────────────────────────────────────
+   Left-indented, block display                                              */
+.l {
+    display: block;
+    margin-left: 3em;
+}
+
+/* ── PB (page break) ─────────────────────────────────────────────────────────
+   Red marker, small bottom margin; content supplied by XSLT: [page N]      */
+.pb {
+    display: block;
+    color: red;
+    margin-bottom: 0.3em;
+    font-size: 0.85em;
+}
+
+/* ── PTR / XREF / REF (links) ───────────────────────────────────────────────
+   Blue, bold for PTR                                                         */
+.ptr {
+    font-weight: bold;
+    color: blue;
+}
+.xref,
+.ref {
+    color: blue;
+    text-decoration: none;
+}
+.xref:hover,
+.ref:hover {
+    text-decoration: underline;
+}
+
+/* ── GI (generic identifier) ────────────────────────────────────────────────
+   Courier New bold, angle brackets added via XSLT or pseudo-elements       */
+.gi {
+    font-family: "Courier New", Courier, monospace;
+    font-weight: bold;
+}
+.gi::before { content: "<"; }
+.gi::after  { content: ">"; }
+
+/* ── EG (example) ───────────────────────────────────────────────────────────
+   Fixedsys / monospace, 8pt                                                 */
+.eg {
+    font-family: "Courier New", Courier, monospace;
+    font-size: 8pt;
+    display: block;
+}
+
+/* ── CODE / IDENT / KW ───────────────────────────────────────────────────────*/
+.code  { font-family: "Courier New", Courier, monospace; font-weight: bold; }
+.ident { font-family: "Courier New", Courier, monospace; }
+.kw    { font-family: "Courier New", Courier, monospace; }
+
+/* ── CALC ────────────────────────────────────────────────────────────────────
+   Right-aligned, right-margin indent                                        */
+.calc {
+    display: block;
+    text-align: right;
+    margin-right: 14em;
+    margin-left: 0;
+}
+
+/* ── TOTAL / NUM (with overline) ─────────────────────────────────────────────*/
+.total,
+.num {
+    text-decoration: overline;
+}
+
+/* ── AS (aligned/indented block) ────────────────────────────────────────────
+   Left-aligned, 150pt indent                                                */
+.as {
+    text-align: left;
+    margin-left: 9em;
+}
+
+/* ── DATE / UNCLEAR ──────────────────────────────────────────────────────────
+   Appends " [datum moeilijk leesbaar]" when combined (DATE UNCLEAR context);
+   alone, DATE just appends a space — handled in XSLT                        */
+.date-unclear::after { content: " [datum moeilijk leesbaar]"; }
+
+/* ── Hidden elements ─────────────────────────────────────────────────────────
+   REVISIONDESC, PUBLICATIONSTMT, FUNDER: hidden in original stylesheet      */
+.revisiondesc,
+.publicationstmt,
+.funder {
+    display: none;
+}
+
+/* ── TEIHEADER / STREULETHEADER ──────────────────────────────────────────────
+   Header metadata block — display is typically handled in XSLT;
+   kept visible here but unstyled unless overridden                          */
+.teiheader {}
+.streuletheader {}
+
+/* ── DISTRIBUTOR / LANGUAGE ──────────────────────────────────────────────────*/
+.distributor {
+    margin-top: 0.2em;
+    margin-bottom: 0.2em;
+}
+.language {
+    margin-bottom: 0.2em;
+}
+.language::before { content: "Language: "; }
+
+/* ── AUTHOR / EDITOR / PRINCIPAL / RESP ─────────────────────────────────────
+   These prepend labels — handled in XSLT, mirrored here for reference      */
+.author::before    { content: "auteur: "; display: block; }
+.editor::before    { content: "editie: "; display: block; }
+.principal::before { content: "markup: "; display: block; }
+
+/* ── CHANGE (revision entry) ────────────────────────────────────────────────
+   Block, auto-numbered in original — XSLT handles numbering                */
+.change {
+    display: block;
+    margin-top: 0.2em;
+    margin-bottom: 0.2em;
+}
+
+/* ── Bibliografische gegevens panel ─────────────────────────────────────── */
+
+details.biblio-details {
+  margin-bottom: 1.25rem;
+  max-width: 500px;
+}
+
+summary.biblio-summary {
+  display: inline-block;
+  cursor: pointer;
+  font-family: "Times New Roman", Times, serif;
+  font-size: 0.9rem;
+ /*  color: #fff7eb;
+  background: #2c1f14; */
+  padding: 0.25rem 0.75rem;
+  /* border-radius: 2px; */
+  list-style: none;
+  user-select: none;
+}
+
+/* remove default triangle in all browsers */
+summary.biblio-summary::-webkit-details-marker { display: none; }
+summary.biblio-summary::marker { display: none; }
+
+summary.biblio-summary::before {
+  content: "▶ ";
+  font-size: 0.65rem;
+  vertical-align: middle;
+}
+
+details.biblio-details[open] summary.biblio-summary::before {
+  content: "▼ ";
+}
+
+.biblio-panel {
+  margin-top: 0.5rem;
+  padding: 0.75rem 1rem;
+  background: #f0e6d6;
+  border-left: 3px solid #2c1f14;
+  font-size: 1rem;
+  color: #2c1f14;
+}
+
+.titlestmt {
+  margin-bottom: 0.5rem;
+}
+
+.titlestmt-line {
+  margin: 0.1rem 0;
+  text-indent: 0;
+}
+
+.titlestmt-label {
+  font-style: italic;
+  color: #5a4a3a;
+}
+
+/* override sourcedesc styles inside the panel */
+.biblio-panel .sourcedesc {
+  margin-left: 0;
+  margin-top: 0.5rem;
+  padding-top: 0.5rem;
+  border-top: 1px solid #c8b99a;
+  color: #2c1f14;
+}

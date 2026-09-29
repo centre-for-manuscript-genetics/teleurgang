@@ -1,0 +1,1204 @@
+/*
+ * teleurgang.css
+ * Styles for the main edition of De teleurgang van den Waterhoek.
+ * Converted from the original Multidoc Pro stylesheet (Lite Default .ssh).
+ *
+ * Colour palette from the original:
+ *   page background : #fff7eb  (warm off-white)
+ *   body text       : #000     (Times New Roman 12pt)
+ *   headings        : navy / maroon / purple (by context)
+ *   editorial/meta  : maroon (italic)
+ *   links           : blue
+ *   page breaks     : red
+ *
+ * Notes on conversion:
+ *   - SPC-INDENT (text-indent), SPC-LEFT (margin-left), SPC-ABOVE/BELOW
+ *     (margin-top/bottom) converted proportionally from proprietary units to em.
+ *   - Generated text (prepended labels etc.) is expressed as ::before/::after
+ *     where purely decorative; content with editorial significance is noted
+ *     for XSLT handling.
+ *   - VISIBLE V=Hide → display: none.
+ *   - FONT-SCALE percentages are converted to em (150% → 1.5em etc.).
+ *   - Garamond used where specified; falls back to Georgia / serif.
+ *   - A-RULER / Z-RULER (decorative rules) → border.
+ */
+
+html {
+  height: 100%;
+}
+
+/* ── Base / TEI.2 ────────────────────────────────────────────────────────────
+   TEI.2: Times New Roman 12pt, left-aligned, warm off-white background,
+   font-size 1.13 rem?
+   8pt left margin, ruled below                                               */
+body,
+.tei2 {
+  font-family: "Times New Roman", Times, serif;
+  font-size: 1.2rem;
+  text-align: left;
+  margin: 0;
+  padding: 0;
+  background-color: #fff7eb;
+  color: #000;
+  border-bottom: 3px solid #ccc;
+  line-height: 1.65;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* ── BODY ────────────────────────────────────────────────────────────────────
+   Times New Roman 12pt (inherits from body)                                 */
+.body {
+    font-family: "Times New Roman", Times, serif;
+    font-size: 1.2rem;
+    line-height: 1.65; 
+    margin: 0;
+    padding: 0;
+}
+
+.page-wrap {
+  flex: 1;
+}
+
+.site-footer {
+  background: #2c1f14;
+  color: #c8b99a;
+  text-align: center;
+  padding: 0.85rem 1rem;
+  font-size: 0.85rem;
+  font-family: 'EB Garamond', Garamond, serif;
+}
+
+.site-footer .footer-line {
+  margin: 0.15rem 0;
+  text-indent: 0;
+  font-size: 1rem;
+}
+
+.site-footer a {
+  color: #e8ddd0;
+  text-decoration: none;
+  border-bottom: 1px solid #c8b99a;
+}
+
+.site-footer a:hover {
+  color: #fff7eb;
+}
+
+/* ── TEXT ────────────────────────────────────────────────────────────────────
+   Block break, ruled below; ::before in maroon (handled in XSLT)           */
+.text {
+    display: block;
+    margin-left: 10px;
+    border-bottom: 5px solid #ccc; /* Z-RULER V="5" */
+}
+
+/* ── TITLEPAGE ───────────────────────────────────────────────────────────────
+   Garamond bold maroon, centred, loose leading, ruled below                 */
+.titlepage {
+    font-family: Garamond, Georgia, serif;
+    font-weight: bold;
+    color: maroon;
+    text-align: center;
+    line-height: 1.4;
+    border-bottom: 3px solid #ccc; /* Z-RULER V="3" */
+}
+
+/* ── TITLESTMT ───────────────────────────────────────────────────────────────
+   Centred                                                                    */
+.titlestmt {
+    text-align: center;
+}
+
+/* ── DOCTITLE ────────────────────────────────────────────────────────────────
+   Garamond 20pt bold, 150% scale → ~30pt, centred, loose leading           */
+.doctitle {
+    font-family: Garamond, Georgia, serif;
+    font-size: 1.875em; /* 20pt * 1.5 scale */
+    font-weight: bold;
+    text-align: center;
+    line-height: 1.4;
+}
+
+/* ── DOCAUTHOR ───────────────────────────────────────────────────────────────
+   20pt bold; first on titlepage: 24pt                                       */
+.docauthor {
+    font-size: 1.67em;  /* 20pt */
+    font-weight: bold;
+}
+
+.titlepage .docauthor:first-of-type {
+    font-size: 2em;     /* 24pt */
+}
+
+/* ── DOCEDITION / DOCDATE ────────────────────────────────────────────────────
+   12pt bold                                                                  */
+.docedition,
+.docdate {
+    font-size: 1em;
+    font-weight: bold;
+}
+
+/* ── DOCIMPRINT ──────────────────────────────────────────────────────────────
+   12pt bold; centred when inside titlepage                                  */
+.docimprint {
+    font-size: 1em;
+    font-weight: bold;
+}
+.titlepage .docimprint {
+    text-align: center;
+}
+
+/* ── Headings by context ─────────────────────────────────────────────────────
+   The original uses ancestor-chain selectors (BODY,DIV,HEAD etc.).
+   Approximated here with structural CSS selectors on .head within
+   named ancestor classes. XSLT should add appropriate class names.
+
+   GROUP > GROUP > HEAD : Garamond 24pt bold maroon, ruled above and below
+   GROUP > HEAD         : Garamond 20pt bold maroon
+   FRONT > HEAD         : bold maroon 250% (~30pt), centred
+   BODY > HEAD          : bold navy 220% (~26pt), centred
+   BODY > DIV > HEAD    : Garamond 20pt bold navy, centred
+   BODY > DIV > DIV > HEAD : Garamond 18pt bold navy
+   BODY > DIV > DIV > DIV > HEAD : Garamond 18pt bold italic navy, indented
+   BODY > DIV > DIV > DIV > DIV > HEAD : Garamond 18pt bold navy, indented
+   BACK > DIV > HEAD    : Garamond 16pt bold italic navy 125%
+   DIV > DIV > HEAD     : navy 150%, centred
+   DIV > DIV > DIV > HEAD : 16pt bold navy, indented
+   LIST > HEAD          : Garamond 14pt bold italic navy 150%
+   Generic HEAD         : bold purple, centred                               */
+
+.group .group .head {
+    font-family: Garamond, Georgia, serif;
+    font-size: 2.25em;    /* 24pt * 150% */
+    font-weight: bold;
+    color: maroon;
+    margin-top: 0.6em;
+    margin-bottom: 0.6em;
+    border-top: 5px solid maroon;    /* A-RULER V="5" */
+    border-bottom: 5px solid maroon; /* Z-RULER V="5" */
+    text-align: left;
+}
+
+.group > .head {
+    font-family: Garamond, Georgia, serif;
+    font-size: 1.875em;   /* 20pt * 150% */
+    font-weight: bold;
+    color: maroon;
+    margin-left: 0.75em;
+    margin-bottom: 0.2em;
+}
+
+.front > .head {
+    font-weight: bold;
+    color: maroon;
+    font-size: 2.5em;
+    text-align: center;
+}
+
+.body > .head {
+    font-weight: bold;
+    color: navy;
+    font-size: 2.2em;
+    text-align: center;
+}
+
+.body > .div > .head {
+    font-family: Garamond, Georgia, serif;
+    font-size: 1.875em;   /* 20pt * 150% */
+    font-weight: bold;
+    color: navy;
+    text-align: center;
+}
+
+.body > .div > .div > .head {
+    font-family: Garamond, Georgia, serif;
+    font-size: 1.6875em;  /* 18pt * 150% */
+    font-weight: bold;
+    color: navy;
+    margin-left: 0.75em;
+}
+
+.body > .div > .div > .div > .head {
+    font-family: Garamond, Georgia, serif;
+    font-size: 1.6875em;
+    font-style: italic;
+    font-weight: bold;
+    color: navy;
+    margin-left: 0.75em;
+}
+
+.body > .div > .div > .div > .div > .head {
+    font-family: Garamond, Georgia, serif;
+    font-size: 1.6875em;
+    font-weight: bold;
+    color: navy;
+    margin-left: 0.75em;
+}
+
+.back > .div > .head {
+    font-family: Garamond, Georgia, serif;
+    font-size: 1.25em;    /* 16pt * 125% */
+    font-style: italic;
+    font-weight: bold;
+    color: navy;
+    margin-left: 0.75em;
+}
+
+.div > .div > .head {
+    color: navy;
+    font-size: 1.5em;
+    text-align: center;
+}
+
+.div > .div > .div > .head {
+    font-size: 1.5em;     /* 16pt * 150% */
+    font-weight: bold;
+    color: navy;
+    text-align: left;
+    margin-top: 0.6em;
+    margin-left: 0.75em;
+}
+
+.list > .head {
+    font-family: Garamond, Georgia, serif;
+    font-size: 1.3125em;  /* 14pt * 150% */
+    font-style: italic;
+    font-weight: bold;
+    color: navy;
+    text-align: left;
+    margin-left: 0.75em;
+}
+
+/* Generic HEAD fallback */
+.head {
+    font-style: normal;
+    font-weight: bold;
+    color: purple;
+    text-align: center;
+    margin-bottom: 0.4em;
+}
+
+/* ── DIV ─────────────────────────────────────────────────────────────────────
+   Small above/below margin                                                   */
+.div {
+    margin-top: 0.6em;
+    margin-bottom: 0.6em;
+}
+
+/* ── Paragraphs ──────────────────────────────────────────────────────────────
+   12pt indent; first-of-type has no indent                                  */
+p {
+    text-indent: 1em;
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+p:first-of-type,
+p.first {
+    text-indent: 0;
+}
+
+/* AVAILABILITY > P (first): extra left indent */
+.availability p:first-of-type {
+    margin-left: 0.75em;
+}
+
+/* ── OPENER / CLOSER ─────────────────────────────────────────────────────────
+   Heavily indented (265 units ≈ 16em), small above/below                   */
+.opener,
+.closer {
+    margin-left: 16em;
+    margin-top: 0.4em;
+    margin-bottom: 0.4em;
+    text-indent: 0;
+}
+
+/* ── TRAILER ─────────────────────────────────────────────────────────────────
+   Centred, above spacing                                                     */
+.trailer {
+    text-align: center;
+    margin-top: 0.6em;
+}
+
+/* ── LG (line group / verse) ─────────────────────────────────────────────────
+   Indented block with above/below spacing                                   */
+.lg {
+    margin-top: 0.6em;
+    margin-bottom: 0.6em;
+    margin-left: 1.5em;
+    text-indent: 0;
+}
+
+/* ── L (verse line) ──────────────────────────────────────────────────────────
+   Left-indented, block                                                       */
+.l {
+    display: block;
+    margin-left: 3em;
+}
+
+/* ── CIT (citation) ──────────────────────────────────────────────────────────
+   11pt, indented block, no first-line indent                                */
+.cit {
+    font-size: 0.917em;  /* 11/12 */
+    margin-top: 0.25em;
+    margin-bottom: 0.25em;
+    margin-left: 3.75em; /* SPC-LEFT V="+=60" */
+    text-indent: 0;
+}
+
+/* ── LIST / ITEM ─────────────────────────────────────────────────────────────
+   LIST: 12pt additional left indent, bottom spacing
+   Nested LIST: no extra indent
+   ITEM: bullet (·), 8pt above
+   Nested ITEM: 38pt additional indent                                        */
+.list {
+    margin-left: 0.75em;
+    margin-bottom: 0.25em;
+    list-style: none;
+    padding-left: 0;
+}
+
+.list .list {
+    margin-left: 0;
+}
+
+.list .list .item {
+    margin-left: 2.375em; /* SPC-LEFT V="+=38" */
+}
+
+.item {
+    margin-top: 0.5em;
+    padding-left: 1em;
+    text-indent: -1em;
+}
+
+.item::before {
+    content: "· ";  /* \183 = middle dot */
+    font-family: Symbol, serif;
+}
+
+/* ── LISTBIBL ────────────────────────────────────────────────────────────────
+   Indented like list                                                         */
+.listbibl {
+    margin-left: 0.75em;
+}
+
+/* ── BIBL ────────────────────────────────────────────────────────────────────
+   Bullet prefix, bottom spacing                                              */
+.bibl {
+    display: block;
+    margin-bottom: 0.3em;
+}
+
+.bibl::before {
+    content: "· ";
+    font-family: Symbol, serif;
+}
+
+/* ── LABEL ───────────────────────────────────────────────────────────────────
+   Bold, small indent                                                         */
+.label {
+    font-weight: bold;
+    text-indent: 1em;
+    margin-right: 1.5em;
+}
+
+/* ── LABEL + TERM ────────────────────────────────────────────────────────────
+   Combined: italic                                                           */
+.label.term {
+    font-style: italic;
+}
+
+/* ── TERM ────────────────────────────────────────────────────────────────────
+   Roman maroon, colon appended                                              */
+.term {
+    font-style: normal;
+    color: maroon;
+}
+.term::after { content: ":"; }
+
+/* ── ITEM > SEG ──────────────────────────────────────────────────────────────
+   Maroon                                                                     */
+.item .seg,
+.seg {
+    color: maroon;
+}
+
+/* ── PB (page break) ─────────────────────────────────────────────────────────
+   Red marker; content "[blz N]" supplied by XSLT                            */
+.pb {
+    display: block;
+    color: red;
+    margin-bottom: 0.3em;
+    font-size: 0.85em;
+}
+
+/* ── NOTE ────────────────────────────────────────────────────────────────────
+   Tight margins, small side spacing                                         */
+.note {
+    display: inline;
+    margin-top: 0.05em;
+    margin-bottom: 0.05em;
+    padding-left: 0.1em;
+    padding-right: 0.1em;
+}
+
+/* ── FIGURE ──────────────────────────────────────────────────────────────────
+   Centred when inside DOCIMPRINT                                            */
+.docimprint .figure {
+    text-align: center;
+}
+
+/* ── REF / XREF (links) ──────────────────────────────────────────────────────
+   Blue, left-aligned                                                         */
+.ref,
+.xref, .xref-external {
+    color: blue;
+    text-align: left;
+    text-decoration: none;
+}
+.ref:hover,
+.xref:hover, .xref-external:hover {
+    text-decoration: underline;
+}
+
+/* ── Inline phrase-level styles ──────────────────────────────────────────────*/
+.emph    { font-style: oblique; }
+.hi      { font-style: italic; }
+.foreign { font-style: italic; }
+.title   { font-style: italic; }
+.date    { text-align: left; }
+.corr    {}
+.add     {}
+.sic     {}
+
+/* ── MENTIONED ───────────────────────────────────────────────────────────────
+   Double curly quotes                                                        */
+.mentioned::before { content: "\201C"; }
+.mentioned::after  { content: "\201D"; }
+
+/* ── SOCALLED ────────────────────────────────────────────────────────────────
+   Single curly quotes (\145 = ' \146 = ')                                  */
+.socalled::before { content: "\2018"; }
+.socalled::after  { content: "\2019"; }
+
+/* ── Q ───────────────────────────────────────────────────────────────────────
+   No added quotes in this stylesheet (CIT,Q has zero indent only)          */
+.q {
+    text-indent: 0;
+}
+
+/* ── SPEAKER ─────────────────────────────────────────────────────────────────
+   Bold italic olive, centred, above spacing                                 */
+.speaker {
+    font-style: italic;
+    font-weight: bold;
+    color: olive;
+    text-align: center;
+    margin-top: 0.6em;
+}
+
+/* ── GI (generic identifier) ─────────────────────────────────────────────────
+   Courier New bold, angle brackets                                          */
+.gi {
+    font-family: "Courier New", Courier, monospace;
+    font-weight: bold;
+}
+.gi::before { content: "<"; }
+.gi::after  { content: ">"; }
+
+/* ── TAGUSAGE ────────────────────────────────────────────────────────────────
+   Courier New bold maroon label; content handled in XSLT                   */
+.tagusage {
+    display: block;
+}
+.tagusage::before {
+    font-family: "Courier New", Courier, monospace;
+    font-weight: bold;
+    color: maroon;
+}
+
+/* ── EG ──────────────────────────────────────────────────────────────────────
+   Monospace 8pt block                                                        */
+.eg {
+    font-family: "Courier New", Courier, monospace;
+    font-size: 8pt;
+    display: block;
+}
+
+/* ── CODE / IDENT / KW ───────────────────────────────────────────────────────*/
+.code  { font-family: "Courier New", Courier, monospace; font-weight: bold; }
+.ident { font-family: "Courier New", Courier, monospace; }
+.kw    { font-family: "Courier New", Courier, monospace; }
+
+/* ── TEIHEADER ───────────────────────────────────────────────────────────────
+   Small left indent                                                          */
+.teiheader {
+    margin-left: 0.3em;
+}
+
+/* ── Metadata labels (italic maroon ::before) ────────────────────────────────
+   These prepend visible labels in the original; replicated here.
+   XSLT may choose to handle these differently.                              */
+.projectdesc::before   { content: "Projectbeschrijving: "; font-style: italic; color: maroon; display: block; }
+.editorialdecl::before { content: "Verantwoording van de teksten DG, D1 en D2: "; font-style: italic; color: maroon; display: block; }
+.funder::before        { content: "Financiële realisatie: "; font-style: italic; color: maroon; display: block; }
+.principal::before     { content: "Markup: "; font-style: italic; color: maroon; display: block; }
+.tagsdecl::before      { content: "Markup: "; font-style: italic; color: maroon; display: block; }
+.editor::before        { content: "Editie: "; font-style: italic; color: maroon; display: block; }
+.distributor::before   { content: "Uitgever: "; font-style: italic; color: maroon; display: block; }
+.language::before      { content: "Language: "; display: block; }
+
+.distributor {
+    margin-top: 0.2em;
+    margin-bottom: 0.2em;
+}
+
+/* PUBLICATIONSTMT > PUBLISHER */
+.publicationstmt .publisher::before {
+    content: "Uitgever: ";
+    font-style: italic;
+    color: maroon;
+    display: block;
+}
+
+/* ── Hidden elements ─────────────────────────────────────────────────────────
+   REVISIONDESC: hidden in original                                          */
+.revisiondesc {
+    display: none;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   Home page — TITLEPAGE
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.titlepage {
+  max-width: 640px;
+  margin: 3rem auto 2rem;
+  padding: 0 1.5rem;
+  text-align: center;
+}
+
+/* Main author (Streuvels) above the title */
+.titlepage > .docauthor:first-of-type,
+.docauthor:not([class*="editors"]) {
+  font-family: 'Garamond', 'EB Garamond', Georgia, serif;
+  font-size: inherit;
+  font-variant: small-caps;
+  letter-spacing: 0.12em;
+  color: #2c1f14;
+  margin: 0 0 0.75rem;
+}
+
+.doctitle {
+  margin: 0 0 1.25rem;
+}
+
+.titlepart-main {
+  font-family: 'Garamond', 'EB Garamond', Georgia, serif;
+  font-size: 1.9rem;
+  font-weight: normal;
+  line-height: 1.25;
+  color: #1a1a3e;        /* navy, consistent with h2 in main stylesheet */
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin: 0 0 0.5rem;
+}
+
+.titlepart-sub {
+  font-family: 'Garamond', 'EB Garamond', Georgia, serif;
+  font-size: 1.1rem;
+  font-style: italic;
+  color: #5a2a2a;        /* maroon */
+  margin: 0.2rem 0;
+}
+
+.titlepart-by {
+  font-size: 0.875rem;
+  color: #555;
+  margin: 0.6rem 0 0.2rem;
+}
+
+/* Editors line */
+.docauthor-editors {
+  font-family: 'Garamond', 'EB Garamond', Georgia, serif;
+  font-size: inherit;
+  color: #2c1f14;
+  margin: 0 0 1.25rem;
+}
+
+/* Vignette image (affvvignet) */
+.titlepart-vignette {
+  margin: 1.25rem auto;
+}
+
+.titlepart-vignette figure {
+  display: inline-block;
+  margin: 0;
+  border: none;
+}
+
+.titlepart-vignette img {
+ /* max-height: 120px;*/
+  width: auto;
+}
+
+/* Imprint block (logo + KANTL, Gent, 2000) */
+.docimprint {
+  margin-top: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.docimprint figure {
+  display: inline-block;
+  margin: 0;
+  border: none;
+}
+
+.docimprint img {
+  max-height: 48px;
+  width: auto;
+}
+
+.imprint-line {
+  font-size: 0.8rem;
+  color: #555;
+  margin: 0;
+}
+
+.imprint-line .publisher,
+.imprint-line .pubplace,
+.imprint-line .docdate {
+  margin-right: 0.25em;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   Home page — TOC
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.home-toc {
+  max-width: 640px;
+  margin: 2.5rem auto 3rem;
+  padding: 0 1.5rem;
+  border-top: 1px solid #c9a96e;
+}
+
+/* Section-level <details> */
+.toc-section {
+  border-bottom: 1px solid #e8d9c0;
+  padding: 0;
+}
+
+.toc-section > summary.toc-section-head {
+  font-family: 'Garamond', 'EB Garamond', Georgia, serif;
+  font-size: 1.1rem;
+  font-weight: normal;
+  color: #1a1a3e;
+  padding: 0.55rem 0.25rem 0.55rem 0;
+  cursor: pointer;
+  list-style: none;         /* hide default marker */
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Custom expand marker */
+.toc-section > summary.toc-section-head::before {
+  content: '▸';
+  font-size: 0.75rem;
+  color: #8b5e3c;
+  flex-shrink: 0;
+  transition: transform 0.15s;
+}
+
+.toc-section[open] > summary.toc-section-head::before {
+  transform: rotate(90deg);
+}
+
+.toc-section > summary.toc-section-head a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.toc-section > summary.toc-section-head a:hover {
+  color: #5a2a2a;
+  text-decoration: underline;
+}
+
+.toc-section-direct {
+    font-family: 'Garamond', 'EB Garamond', Georgia, serif;
+    font-size: 1.1rem;
+    color: #1a1a3e;
+    padding: 0.55rem 0.05rem; /* 0.25rem in summary accounts for triangle glyph; not needed here */
+    margin: 0;
+    border-bottom: 1px solid #e8d9c0;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    text-indent: 0;
+}
+
+/* Invisible triangle placeholder — same size and gap as the real ▸,
+   so the link text aligns with collapsible section labels */
+.toc-section-direct::before {
+  content: '▸';
+  font-size: 0.75rem;
+  visibility: hidden;
+  flex-shrink: 0;
+}
+
+.toc-section-direct a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.toc-section-direct a:hover {
+  color: #5a2a2a;
+  text-decoration: underline;
+}
+
+.toc-subsection-direct {
+    font-family: 'Garamond', 'EB Garamond', Georgia, serif;
+    font-size: 0.9rem;
+    color: #5a2a2a;
+    padding: 0.3rem 0.05rem 0.3rem 1.25rem; /* indent matches collapsible subsections */
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    text-indent: 0;
+}
+
+.toc-subsection-direct::before {
+    content: '▸';
+    font-size: 0.65rem;
+    visibility: hidden;
+    flex-shrink: 0;
+}
+
+.toc-subsection-direct a {
+    color: inherit;
+    text-decoration: none;
+}
+
+.toc-subsection-direct a:hover {
+    text-decoration: underline;
+}
+
+/* Subsection-level <details> */
+.toc-subsection {
+  margin: 0.1rem 0 0.1rem 1.25rem;
+}
+
+.toc-subsection > summary.toc-subsection-head {
+  font-family: 'Garamond', 'EB Garamond', Georgia, serif;
+  font-size: 0.9rem;
+  color: #5a2a2a;
+  padding: 0.3rem 0;
+  cursor: pointer;
+  list-style: none;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.toc-subsection > summary.toc-subsection-head::before {
+  content: '▸';
+  font-size: 0.65rem;
+  color: #8b5e3c;
+  flex-shrink: 0;
+  transition: transform 0.15s;
+}
+
+.toc-subsection[open] > summary.toc-subsection-head::before {
+  transform: rotate(90deg);
+}
+
+.toc-subsection > summary.toc-subsection-head a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.toc-subsection > summary.toc-subsection-head a:hover {
+  text-decoration: underline;
+}
+
+/* Item lists */
+.toc-items {
+  list-style: none;
+  margin: 0.2rem 0 0.5rem 1.5rem;
+  padding: 0;
+}
+
+.toc-item {
+  padding: 0.15rem 0;
+  font-size: 0.875rem;
+}
+
+.toc-item a {
+  color: #1a3a6e;
+  text-decoration: none;
+}
+
+.toc-item a:hover {
+  color: #5a2a2a;
+  text-decoration: underline;
+}
+
+/* Suppress the default <summary> triangle in WebKit */
+summary::-webkit-details-marker { display: none; }
+
+/* ── Glossary tooltips ───────────────────────────────────────────────────────
+   REF elements that target a glossary item receive data-tooltip from XSLT.
+   Pure CSS popup — no JavaScript.                                           */
+a.ref[data-tooltip] {
+    cursor: help;
+    text-decoration-style: dotted;
+    position: relative;
+}
+
+a.ref[data-tooltip]::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    bottom: calc(100% + 4px);
+    left: 0;
+    background-color: #2c1f14;
+    color: #fff7eb;
+    font-family: 'Garamond', 'EB Garamond', Georgia, serif;
+    font-size: 0.875rem;
+    font-style: normal;
+    font-weight: normal;
+    line-height: 1.4;
+    padding: 0.3em 0.6em;
+    border-radius: 3px;
+    width: max-content;
+    max-width: 280px;
+    white-space: normal;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.15s ease;
+    z-index: 100;
+}
+
+a.ref[data-tooltip]:hover::after {
+    opacity: 1;
+}
+
+/* Offset anchor targets to account for sticky navbar height */
+[id] {
+    scroll-margin-top: 3.5rem; /* adjust to match actual navbar height */
+}
+
+/* ── Section landing pages (Verantwoording, Bronnen) ────────────────────────*/
+.section-landing {
+    max-width: 640px;
+    margin: 3rem auto;
+    padding: 0 1.5rem;
+}
+
+.section-landing-head {
+    font-family: 'Garamond', 'EB Garamond', Georgia, serif;
+    font-size: 1.75rem;
+    font-weight: normal;
+    color: #1a1a3e;
+    border-bottom: 1px solid #c9a96e;
+    padding-bottom: 0.4rem;
+    margin-bottom: 1.5rem;
+}
+
+.section-landing-toc {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.section-landing-item {
+    border-bottom: 1px solid #e8d9c0;
+    padding: 0.6rem 0.25rem;
+    font-family: 'Garamond', 'EB Garamond', Georgia, serif;
+    font-size: 1.1rem;
+}
+
+.section-landing-item a {
+    color: #1a1a3e;
+    text-decoration: none;
+}
+
+.section-landing-item a:hover {
+    color: #5a2a2a;
+    text-decoration: underline;
+}
+
+/* ── Footnote references (inline superscripts) ───────────────────────────────*/
+sup.noteref {
+    font-size: 0.7em;
+    line-height: 0;
+    vertical-align: super;
+}
+
+sup.noteref a {
+    font-family: 'Garamond', 'EB Garamond', Georgia, serif;
+    color: #5a2a2a;
+    text-decoration: none;
+}
+
+sup.noteref a:hover {
+    text-decoration: underline;
+}
+
+/* ── Endnotes section ────────────────────────────────────────────────────────*/
+.endnotes {
+    margin-top: 3rem;
+    border-top: 1px solid #c9a96e;
+    padding-top: 1rem;
+    max-width: 100%;
+}
+
+.endnotes-head {
+    font-family: 'Garamond', 'EB Garamond', Georgia, serif;
+    font-size: 1.1rem;
+    font-weight: normal;
+    color: #5a2a2a;
+    margin-bottom: 0.75rem;
+}
+
+.endnotes-list {
+    padding-left: 1.5rem;
+    margin: 0;
+}
+
+.endnote {
+    font-size: 0.9rem;
+    line-height: 1.6;
+    margin-bottom: 0.5rem;
+    text-indent: 0;
+}
+
+.endnote-backref {
+    color: #8b5e3c;
+    text-decoration: none;
+    margin-right: 0.4em;
+    font-size: 0.85em;
+}
+
+.endnote-backref:hover {
+    text-decoration: underline;
+}
+
+figure.figure-inline {
+  float: right;
+  margin: 0 0 1rem 1.5rem;
+  max-width: 260px;
+}
+
+figure.figure-inline img {
+  width: 100%;
+  height: auto;
+  border: 1px solid #c8b99a;
+}
+
+figure.figure-inline figcaption {
+  font-size: 0.85rem;
+  color: #5a4a3a;
+  text-align: center;
+  margin-top: 0.4rem;
+}
+
+figure.figure-inline-right,
+figure.figure-inline-left {
+  margin-bottom: 1rem;
+  max-width: 260px;
+}
+
+figure.figure-inline-right {
+  float: right;
+  margin-left: 1.5rem;
+}
+
+figure.figure-inline-left {
+  float: left;
+  margin-right: 1.5rem;
+}
+
+figure.figure-inline-right img,
+figure.figure-inline-left img {
+  width: 100%;
+  height: auto;
+  border: 1px solid #c8b99a;
+}
+
+figure.figure-inline-right figcaption,
+figure.figure-inline-left figcaption {
+  font-size: 0.85rem;
+  color: #5a4a3a;
+  text-align: center;
+  margin-top: 0.4rem;
+}
+
+.lightbox-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  background: rgba(0, 0, 0, 0.85);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.lightbox-overlay img {
+  max-width: 90vw;
+  max-height: 90vh;
+  object-fit: contain;
+}
+
+.lightbox-close {
+  position: absolute;
+  top: 1rem;
+  right: 1.25rem;
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 1.5rem;
+  cursor: pointer;
+  line-height: 1;
+}
+
+a.image-link {
+  border-bottom: 1px dashed currentColor;
+}
+
+.div-chapter figure.figure {
+  margin: 1.5rem auto;
+  display: block;
+  text-align: center;
+}
+
+.div-chapter figure.figure img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* ── Apparatus ─────────────────────────────────────────────────────────── */
+
+.apparatus-trigger {
+  display: inline-block;
+  width: 1rem;
+  height: 1rem;
+  line-height: 1rem;
+  font-size: 0.55rem;
+  text-align: center;
+  vertical-align: middle;
+  background: #2c1f14;
+  color: #fff7eb;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  margin-right: 0.3rem;
+  padding: 0;
+  position: relative;
+  top: -0.1em;
+  flex-shrink: 0;
+}
+
+.apparatus-trigger.is-active {
+  background: #8b1a1a;
+}
+
+.apparatus-panel {
+  position: fixed; /* fixed instead of absolute — works with drag */
+  z-index: 100;
+  background: #f5ede0;
+  border: 1px solid #c8b99a;
+  border-left: 3px solid #2c1f14;
+  padding: 0.6rem 0.85rem;
+  min-width: 280px;
+  max-width: 700px;
+  box-shadow: 2px 2px 6px rgba(0,0,0,0.15);
+  margin-top: 0;
+  cursor: default;
+}
+
+.apparatus-panel-handle {
+  cursor: grab;
+  font-size: 0.75rem;
+  color: #5a4a3a;
+  text-align: right;
+  margin-bottom: 0.4rem;
+  user-select: none;
+  border-bottom: 1px solid #c8b99a;
+  padding-bottom: 0.3rem;
+}
+
+.apparatus-panel-handle:active {
+  cursor: grabbing;
+}
+
+
+.apparatus-witness {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  padding: 0.2rem 0;
+  border-bottom: 1px solid #e0d4c0;
+  flex-wrap: wrap;
+}
+
+.apparatus-witness:last-child {
+  border-bottom: none;
+}
+
+.apparatus-label {
+  font-weight: bold;
+  font-size: 0.9rem;
+  color: #2c1f14;
+  min-width: 3rem;
+  flex-shrink: 0;
+}
+
+.apparatus-img-link {
+  font-size: 0.9rem;
+  color: #5a4a3a;
+  text-decoration: none;
+  border-bottom: 1px dotted #5a4a3a;
+  margin-right: 0.3rem;
+}
+
+.apparatus-img-link:hover {
+  color: #8b1a1a;
+}
+
+.apparatus-text-toggle {
+  background: none;
+  border: 1px solid #c8b99a;
+  border-radius: 2px;
+  font-size: 0.9rem;
+  color: #2c1f14;
+  cursor: pointer;
+  padding: 0.05rem 0.4rem;
+  font-family: inherit;
+}
+
+.apparatus-text-toggle:hover {
+  background: #e8ddd0;
+}
+
+.apparatus-text {
+  width: 100%;
+  margin-top: 0.4rem;
+  padding: 0.5rem 0.6rem;
+  background: #fff7eb;
+  border: 1px solid #c8b99a;
+  /* font-size: 0.9rem; */
+  line-height: 1.6;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.apparatus-panel[hidden],
+.apparatus-text[hidden] {
+  display: none !important;
+}
